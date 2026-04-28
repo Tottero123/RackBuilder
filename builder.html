@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildYourRack</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+   
+   
+    
+  
+    <h2 id="nameTitle"></h2>
+    <label for="upload" class="upload-btn">Add Device</label>
+    <input type="file" id="upload" accept="image/*">
+    <input type="text" id="editBox" style="display:none;">
+   
+
+   <script>
+    const images = document.querySelectorAll(".device");
+    const nameTitle = document.getElementById("nameTitle");
+    const upload = document.getElementById("upload");
+   
+
+    function addHoverEffect(img) {
+        img.addEventListener("mouseenter", () => {
+            nameTitle.textContent = img.alt;
+        });
+        img.addEventListener("mouseleave", () => {
+            nameTitle.textContent = "";
+        });
+    }
+
+    // Apply to existing images
+    images.forEach(addHoverEffect);
+
+    // Handle uploads
+    upload.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const img = document.createElement("img");
+        img.classList.add("device");
+
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+
+        addHoverEffect(img);
+
+        document.body.insertBefore(img, nameTitle);
+    });
+    function loadImage() {
+        
+    }
+    const editBox = document.getElementById("editBox");
+let currentImage = null;
+
+function enableEditing(img) {
+    img.addEventListener("click", () => {
+        editBox.value = "";
+        currentImage = img;
+
+      
+        editBox.style.display = "block";
+        editBox.focus();
+
+        document.body.classList.add("editing");
+    });
+}
+
+// Apply to existing images
+images.forEach(enableEditing);
+
+// ALSO apply to uploaded images
+function addHoverEffect(img) {
+    img.addEventListener("mouseenter", () => {
+        nameTitle.textContent = img.alt;
+    });
+    img.addEventListener("mouseleave", () => {
+        nameTitle.textContent = "";
+    });
+
+    enableEditing(img); // 👈 important
+}
+editBox.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && currentImage) {
+        currentImage.alt = editBox.value;
+
+        editBox.style.display = "none";
+        document.body.classList.remove("editing");
+
+        currentImage = null;
+    }
+});
+
+    
+</script>
+</body>
+</html>
